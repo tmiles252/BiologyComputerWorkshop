@@ -525,11 +525,14 @@ Use the code block below to work:
 
 ```{r import_dat}
 # 1. Use read_csv() to import the 3 data files
-
-
+Capture <- read_csv("nifflers_capture.csv")
+Recruitment <- read_csv("nifflers_recruitment.csv")
+Treasure <- read_csv("nifflers_treasure.csv")
 
 # 2. Use glimpse() to inspect each data frame
-
+glimpse(Capture)
+glimpse(Recruitment)
+glimpse(Treasure)
 ```
 
 Our raw data contains:
@@ -563,10 +566,29 @@ Use the code block below to complete each step.
 
 ```{r clean}
 # Clean capture data here
+unique(Capture$site)
+Capture <- Capture %>% 
+  mutate(site = case_when(
+    site == "gringotts" ~ "Gringotts",
+    site == "Gringotts Bank" ~ "Gringotts",
+    TRUE ~ site), 
+    sex = as.factor(sex)
+  )
+
+Capture %>% filter(is.na(age))
+Capture %>% filter(is.na(weight_g))
+
 
 
 # Clean treasure data here
+Treasure <- Treasure %>% 
+  mutate(date = ymd(date),
+         site = case_when(
+           site == "ForbiddenForest" ~ "Forbidden Forest",
+           TRUE ~ site
+         ))
 
+unique(Treasure$site)
 
 # Clean recruitment data here
 
